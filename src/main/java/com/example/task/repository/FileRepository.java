@@ -13,6 +13,12 @@ import java.util.List;
 @Repository
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
 
-    @Query("SELECT p.fileDate as date, p.fileOriginalName as filename, p.fileSize as size, p.fileStorage as downloadlink FROM FileEntity p ")
-    Page<FileEntity> findAllFiles(PageRequest page);
+    List <FileEntity> findByFileOriginalName(String fileOriginalName);
+
+    @Query("SELECT e FROM FileEntity e WHERE e.fileDate BETWEEN :firstDate AND :secondDate")
+    List<FileEntity> findByFileDateInterval(Long firstDate, Long secondDate);
+
+    @Query("SELECT P FROM FileEntity P WHERE P.fileSize BETWEEN :firstSize AND :secondSize")
+    List<FileEntity> findByFileSizeInterval(Long firstSize, Long secondSize);
+
 }
