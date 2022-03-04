@@ -32,7 +32,6 @@ public class FileService {
 
     public Page<FileEntity> getFiles(Pageable page){
         return fileRepository.findAll(page);
-
     }
 
     public Page<FileEntity> getFiles1(int pageNumber, int pageSize){
