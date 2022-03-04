@@ -1,23 +1,23 @@
 package com.example.task.service;
 
 import com.example.task.dto.FileDTO;
-import com.example.task.dto.FilePageDTO;
 import com.example.task.entity.FileEntity;
 import com.example.task.repository.FileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 @Service
 public class FileService {
 
-    @Autowired
-    FileRepository fileRepository;
+    final FileRepository fileRepository;
+
+    public FileService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
 
     public void fileAdd(FileDTO fileDTO) {
     FileEntity fileEntity = FileEntity.builder()

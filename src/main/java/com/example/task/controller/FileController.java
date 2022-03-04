@@ -1,5 +1,6 @@
 package com.example.task.controller;
 
+import com.example.task.dto.FileDTO;
 import com.example.task.entity.FileEntity;
 import com.example.task.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 public class FileController {
 
-    @Autowired
-    FileService fileService;
+    final FileService fileService;
+
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
 
     @GetMapping("/api/1.0/files")
     Page<FileEntity> getFiles(Pageable page){

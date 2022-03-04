@@ -1,14 +1,9 @@
 package com.example.task.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.example.task.entity.FileEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class FilePageDTO {
 
     private Long fileSize;
@@ -16,4 +11,10 @@ public class FilePageDTO {
     private Long fileDate;
     private String fileOriginalName;
 
+    public FilePageDTO(FileEntity fileEntity) {
+        this.fileSize = fileEntity.getFileSize();
+        this.fileStorage = fileEntity.getFileStorage();
+        this.fileDate = fileEntity.getFileDate();
+        this.fileOriginalName = fileEntity .getFileOriginalName();
+    }
 }
