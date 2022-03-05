@@ -28,8 +28,9 @@ public class FileService {
                 .fileGeneratedName(fileDTO.getFileGeneratedName())
                 .fileDate(fileDTO.getFileDate())
                 .fileStorage(fileDTO.getFileStorage())
-                .fileOriginalName(fileDTO.getFileOriginalName())
+                .fileOriginalName(fileDTO.getFileOriginalName().split("\\.")[0])
                 .build();
+        System.out.println(fileDTO.getFileOriginalName().split("\\.")[0]);
         fileRepository.save(fileEntity);
     }
 

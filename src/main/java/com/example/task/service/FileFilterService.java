@@ -29,7 +29,6 @@ public class FileFilterService {
         List<FilePageDTO> newList = new ArrayList<>();
 
         for (FileEntity fileEntity : fileEntities) {
-
             FilePageDTO filePageDTO = new FilePageDTO();
             filePageDTO.setFileSize(fileEntity.getFileSize());
             filePageDTO.setFileDate(Util.timeParse(fileEntity.getFileDate()));
@@ -37,21 +36,14 @@ public class FileFilterService {
             filePageDTO.setFileOriginalName(fileEntity.getFileOriginalName());
             newList.add(filePageDTO);
         }
-
         return newList;
     }
+
+
     public List<FilePageDTO> getOne(String fileOriginalName) {
         return convertEntityDto(fileRepository.findByFileOriginalName(fileOriginalName));
     }
 
-    private FilePageDTO convertToDo(FileEntity fileEntity){
-        FilePageDTO filePageDTO = new FilePageDTO();
-        filePageDTO.setFileDate(Util.timeParse(fileEntity.getFileDate()));
-        filePageDTO.setFileSize(fileEntity.getFileSize());
-        filePageDTO.setFileStorage(fileEntity.getFileStorage());
-        filePageDTO.setFileOriginalName(fileEntity.getFileOriginalName());
-        return filePageDTO;
-    }
 
     @Transactional
     public ResponsePageableDto getFilesByTime(String firstDate, String secondDate) throws ParseException {
@@ -63,7 +55,7 @@ public class FileFilterService {
         List<FileEntity> result = fileRepository.findByFileDateInterval(firstDate1, secondDate1);
 
 
-//        Page<FileEntity> result
+        Page<FileEntity> result
         ResponsePageableDto responsePageableDto = new ResponsePageableDto();
 
         responsePageableDto.setPageable(new PageableDto(result.getTotalPages(),

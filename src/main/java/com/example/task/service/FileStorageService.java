@@ -85,13 +85,13 @@ public class FileStorageService {
         Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        String generatedName = currentYear + "." + currentMonth + "." + currentDay + "." + generateRandomName(15) + "." + extension;
+        String generatedName = currentYear + "." + currentMonth + "." + currentDay + "." + generateRandomName(15) ;
         Long unixTime = Instant.now().getEpochSecond();
 
 
         try {
             byte[] bytes = file.getBytes();
-            String insPath = "C:\\Users\\User\\IdeaProjects\\Task\\uploads\\" + generatedName; // Directory path where you want to save ;
+            String insPath = "C:\\Users\\User\\IdeaProjects\\Task\\uploads\\" + generatedName + "." + extension; // Directory path where you want to save ;
             Files.write(Paths.get(insPath), bytes);
         }
 
@@ -101,7 +101,7 @@ public class FileStorageService {
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
-                .path(generatedName)
+                .path(generatedName+ "." + extension)
                 .toUriString();
 
         FileDTO fileDTO = FileDTO.builder()
