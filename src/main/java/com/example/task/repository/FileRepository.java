@@ -1,6 +1,5 @@
 package com.example.task.repository;
 
-import com.example.task.dto.FilePageDTO;
 import com.example.task.entity.FileEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -23,12 +23,12 @@ public class FilterController {
     }
 
     @GetMapping("/get-files-bytime")
-    public ResponsePageableDto getFilesByTime(@RequestParam String firstDate, @RequestParam String secondDate) throws ParseException {
-        return fileFilterService.getFilesByTime(firstDate, secondDate);
+    public ResponsePageableDto getFilesByTime(@RequestParam(defaultValue = "1") int pageNumber, @RequestParam (defaultValue = "10") int pageSize, @RequestParam String firstDate, @RequestParam String secondDate) throws ParseException {
+        return fileFilterService.getFilesByTime(pageNumber, pageSize, firstDate, secondDate);
     }
 
     @GetMapping("/get-file-bySize")
-    public ResponsePageableDto getFilesBySize(@RequestParam Long firstSize, @RequestParam Long secondSize){
-        return fileFilterService.getFilesBySize(firstSize, secondSize);
+    public ResponsePageableDto getFilesBySize(@RequestParam(defaultValue = "1") int pageNumber, @RequestParam (defaultValue = "10") int pageSize, @RequestParam Long firstSize, @RequestParam Long secondSize){
+        return fileFilterService.getFilesBySize(pageNumber, pageSize, firstSize, secondSize);
     }
 }

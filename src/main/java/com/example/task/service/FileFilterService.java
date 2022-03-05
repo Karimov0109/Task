@@ -7,6 +7,7 @@ import com.example.task.entity.FileEntity;
 import com.example.task.repository.FileRepository;
 import com.example.task.utils.Util;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -46,20 +47,20 @@ public class FileFilterService {
 
 
     @Transactional
-    public ResponsePageableDto getFilesByTime(String firstDate, String secondDate) throws ParseException {
+    public ResponsePageableDto getFilesByTime(int pageNumber, int pageSize, String firstDate, String secondDate) throws ParseException {
 
         Long firstDate1 = Util.dateParse(firstDate);
         Long secondDate1 = Util.dateParse(secondDate);
 
-        PageRequest page = PageRequest.of(Math.toIntExact(firstDate1), Math.toIntExact(secondDate1));
+        PageRequest page = PageRequest.of(pageNumber, pageSize);
         List<FileEntity> result = fileRepository.findByFileDateInterval(firstDate1, secondDate1);
 
+        final Page<FileEntity> page1 = new PageImpl<>(result);
 
-        Page<FileEntity> result
         ResponsePageableDto responsePageableDto = new ResponsePageableDto();
 
-        responsePageableDto.setPageable(new PageableDto(result.getTotalPages(),
-                result.getTotalElements(),
+        responsePageableDto.setPageable(new PageableDto(page1.getTotalPages(),
+                page1.getTotalElements(),
                 page.getPageNumber(),
                 page.getPageSize()));
         responsePageableDto.setData(result.stream().map(FilePageDTO::new).collect(Collectors.toList()));
@@ -68,14 +69,16 @@ public class FileFilterService {
     }
 
     @Transactional
-    public ResponsePageableDto getFilesBySize(Long firstSize, Long secondSize) {
-        PageRequest page = PageRequest.of(Math.toIntExact(firstSize), Math.toIntExact(secondSize));
-        Page<FileEntity> result = fileRepository.findByFileSizeInterval(page);
+    public ResponsePageableDto getFilesBySize(int pageNumber, int pageSize, Long firstSize, Long secondSize) {
+        PageRequest page = PageRequest.of(pageNumber, pageSize);
+        List<FileEntity> result = fileRepository.findByFileSizeInterval(firstSize, secondSize);
+
+        final Page<FileEntity> page2 = new PageImpl<>(result);
 
         ResponsePageableDto responsePageableDto = new ResponsePageableDto();
 
-        responsePageableDto.setPageable(new PageableDto(result.getTotalPages(),
-                result.getTotalElements(),
+        responsePageableDto.setPageable(new PageableDto(page2.getTotalPages(),
+                page2.getTotalElements(),
                 page.getPageNumber(),
                 page.getPageSize()));
         responsePageableDto.setData(result.stream().map(FilePageDTO::new).collect(Collectors.toList()));
