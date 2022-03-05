@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,32 @@ public class FileFilterService {
         this.fileRepository = fileRepository;
     }
 
-    public List<FileEntity> getOne(String fileOriginalName) {
-        return fileRepository.findByFileOriginalName(fileOriginalName);
+    private static List<FilePageDTO> convertEntityDto(List<FileEntity> fileEntities) {
+        List<FilePageDTO> newList = new ArrayList<>();
+
+        for (FileEntity fileEntity : fileEntities) {
+
+            FilePageDTO filePageDTO = new FilePageDTO();
+            filePageDTO.setFileSize(fileEntity.getFileSize());
+            filePageDTO.setFileDate(Util.timeParse(fileEntity.getFileDate()));
+            filePageDTO.setFileStorage(fileEntity.getFileStorage());
+            filePageDTO.setFileOriginalName(fileEntity.getFileOriginalName());
+            newList.add(filePageDTO);
+        }
+
+        return newList;
+    }
+    public List<FilePageDTO> getOne(String fileOriginalName) {
+        return convertEntityDto(fileRepository.findByFileOriginalName(fileOriginalName));
+    }
+
+    private FilePageDTO convertToDo(FileEntity fileEntity){
+        FilePageDTO filePageDTO = new FilePageDTO();
+        filePageDTO.setFileDate(Util.timeParse(fileEntity.getFileDate()));
+        filePageDTO.setFileSize(fileEntity.getFileSize());
+        filePageDTO.setFileStorage(fileEntity.getFileStorage());
+        filePageDTO.setFileOriginalName(fileEntity.getFileOriginalName());
+        return filePageDTO;
     }
 
     @Transactional
@@ -35,8 +60,10 @@ public class FileFilterService {
         Long secondDate1 = Util.dateParse(secondDate);
 
         PageRequest page = PageRequest.of(Math.toIntExact(firstDate1), Math.toIntExact(secondDate1));
-        Page<FileEntity> result = fileRepository.findByFileDateInterval(page);
+        List<FileEntity> result = fileRepository.findByFileDateInterval(firstDate1, secondDate1);
 
+
+//        Page<FileEntity> result
         ResponsePageableDto responsePageableDto = new ResponsePageableDto();
 
         responsePageableDto.setPageable(new PageableDto(result.getTotalPages(),

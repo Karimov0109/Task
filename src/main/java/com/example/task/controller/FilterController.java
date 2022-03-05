@@ -1,10 +1,8 @@
 package com.example.task.controller;
 
+import com.example.task.dto.FilePageDTO;
 import com.example.task.dto.ResponsePageableDto;
-import com.example.task.entity.FileEntity;
-import com.example.task.response.Response;
 import com.example.task.service.FileFilterService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -20,7 +18,7 @@ public class FilterController {
     }
 
     @GetMapping("/get-one")
-    public List<FileEntity> getOneFile(@RequestParam String fileOriginalName) {
+    public List<FilePageDTO> getOneFile(@RequestParam String fileOriginalName) {
         return fileFilterService.getOne(fileOriginalName);
     }
 
