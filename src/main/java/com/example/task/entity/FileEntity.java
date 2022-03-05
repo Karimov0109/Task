@@ -23,7 +23,7 @@ public class FileEntity {
     @Column(name = "file_size")
     private Long fileSize;
 
-    @Column(name = "file_storage")
+    @Column(name = "file_storage", unique = true)
     private String fileStorage;
 
     @Column(name = "file_date")

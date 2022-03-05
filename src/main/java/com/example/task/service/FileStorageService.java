@@ -1,14 +1,11 @@
 package com.example.task.service;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.Random;
 
 import com.example.task.dto.FileDTO;
@@ -21,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -45,25 +41,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
-        // Normalizing file name
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-        try {
-            // Checking if the file's name contains invalid characters
-            if(fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
-
-            // Coping file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-            return fileName;
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
-        }
-    }
 
     public Resource loadFileAsResource(String fileName) {
         try {
@@ -88,15 +66,14 @@ public class FileStorageService {
         String generatedName = currentYear + "." + currentMonth + "." + currentDay + "." + generateRandomName(15) ;
         Long unixTime = Instant.now().getEpochSecond();
 
-
         try {
             byte[] bytes = file.getBytes();
             String insPath = "C:\\Users\\User\\IdeaProjects\\Task\\uploads\\" + generatedName + "." + extension; // Directory path where you want to save ;
             Files.write(Paths.get(insPath), bytes);
         }
 
-        catch (IOException e) {
-            // Handling exception here
+        catch (Exception e) {
+            throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", e);
         }
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
